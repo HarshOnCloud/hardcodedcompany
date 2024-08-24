@@ -99,7 +99,7 @@ pipeline {
                         sudo rm -rf /var/www/html/*
 
 
-                        sh 'ls -la dashboard/starter-example/.next'
+                         
                         chmod -R 755 .next
 
                         
