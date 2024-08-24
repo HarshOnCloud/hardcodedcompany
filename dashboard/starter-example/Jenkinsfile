@@ -75,7 +75,7 @@ pipeline {
                 script {
                     def resourceGroup = 'Harshvardhan'
                     def vmName = 'VM1'
-
+                    def vmIP = '20.224.162.44'
                     // Stop the existing application, copy new files, and restart the application
                     sh """
                     # Install Azure CLI
