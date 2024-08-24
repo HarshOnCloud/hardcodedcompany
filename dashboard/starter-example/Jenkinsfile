@@ -76,8 +76,10 @@ pipeline {
                     def resourceGroup = 'Harshvardhan'
                     def vmName = 'VM1'
                     def vmIP = '20.224.162.44'
-                    // Stop the existing application, copy new files, and restart the application
+                    
+                    sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
                     sh """
+                    ssh -o StrictHostKeyChecking=no ${env.VM_USER}@${env.VM_IP} "echo 'Logged in successfully'"
                     az vm run-command invoke \
                         --command-id RunShellScript \
                         --name ${vmName} \
@@ -96,7 +98,8 @@ pipeline {
                         sudo systemctl start nginx
                         '
                     """
-                }
+                    }
+                                    }
             }
         }
         stage('Health Check') {
