@@ -59,7 +59,7 @@ pipeline {
         stage('Archive Artifacts') {
             steps {
                 archiveArtifacts artifacts: '.next/**', allowEmptyArchive: true
-                sh 'ls -la'
+                sh 'ls -la dashboard/starter-example'
             }
         }
         stage('Login to Azure') {
