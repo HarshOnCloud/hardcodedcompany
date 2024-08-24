@@ -86,6 +86,8 @@ pipeline {
                 // Ensure that the .next directory exists
                 sh 'ls -la .next'
                 sh 'chmod -R 755 .next'
+                sudo chmod -R 755 /var/www/html/
+
 
                 // Use sshagent to handle SSH connections
                 sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
