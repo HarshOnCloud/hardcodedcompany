@@ -89,10 +89,7 @@ pipeline {
 
                 // Use sshagent to handle SSH connections
                 sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
-                    // Ensure the target directory exists and has correct permissions
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ${vmUser}@${vmIP} 'mkdir -p /var/www/html && sudo chmod -R 755 /var/www/html'
-                    """
+                    
 
                     // Copy files to the remote VM
                     sh """
