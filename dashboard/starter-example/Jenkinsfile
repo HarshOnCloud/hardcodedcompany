@@ -78,10 +78,6 @@ pipeline {
                     def vmIP = '20.224.162.44'
                     // Stop the existing application, copy new files, and restart the application
                     sh """
-                    # Install Azure CLI
-                    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-                    # Verify installation
-                    az --version
                     az vm run-command invoke \
                         --command-id RunShellScript \
                         --name ${vmName} \
