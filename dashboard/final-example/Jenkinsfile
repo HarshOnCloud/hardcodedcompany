@@ -49,7 +49,7 @@ pipeline {
                 // Navigate to the specific folder
                 dir('dashboard/final-example') {
                     // Perform the build (adjust command as needed)
-                    sh 'npm install'
+                    sh 'npm install --legacy-peer-deps'
                     sh 'npm run build'
                 }
             }
