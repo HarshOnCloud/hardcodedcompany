@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        SSH_PRIVATE_KEY = credentials('b7b707e4-f888-408d-8611-7ec1439a71cb')
+        SSH_PRIVATE_KEY = credentials('ab1ed2fc-ffdc-4b71-b710-476ae9705f3b')
         VM_IP = '20.224.162.44'
         VM_USER = 'azureuser'
     }
