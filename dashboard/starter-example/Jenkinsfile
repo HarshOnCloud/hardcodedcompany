@@ -80,6 +80,8 @@ pipeline {
                     sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no ${env.VM_USER}@${env.VM_IP} "echo 'Logged in successfully'"
+                    az login
+                    az account set --subscription c23fda47-c4d8-4460-bebe-412d27288d0c
                     az vm run-command invoke \
                         --command-id RunShellScript \
                         --name ${vmName} \
