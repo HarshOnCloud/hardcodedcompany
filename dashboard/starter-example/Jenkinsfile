@@ -9,7 +9,7 @@ pipeline {
         SSH_PRIVATE_KEY = credentials('ab1ed2fc-ffdc-4b71-b710-476ae9705f3b')
         VM_IP = '20.224.162.44'
         VM_USER = 'azureuser'
-        PASSWORD = 'your_password'
+        PASSWORD = 'Password@123'
     }
 
     stages {
