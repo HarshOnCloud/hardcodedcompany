@@ -1,0 +1,125 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'NodeJS'
+    }
+
+    environment {
+        SSH_PRIVATE_KEY = credentials('b7b707e4-f888-408d-8611-7ec1439a71cb')
+        VM_IP = '20.224.162.44'
+        VM_USER = 'azureuser'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/HarshOnCloud/hardcodedcompany.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+         stage('Update Packages') {
+            steps {
+                sh 'npm update'
+            }
+        }
+
+        stage('Lint and Fix') {
+            steps {
+                sh 'npm run lint -- --fix'
+            }
+        }
+
+        stage('Prettier Fix') {
+            steps {
+                sh 'npm run prettier -- --write .'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                sh 'npm test'
+            }
+        }
+         stage('Build') {
+            steps {
+                // Navigate to the specific folder
+                dir('dashboard/starter-example') {
+                    // Perform the build (adjust command as needed)
+                    sh 'npm install --legacy-peer-deps'
+                    sh 'npm run build'
+                }
+            }
+        }
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+            }
+        }
+        stage('Login to Azure') {
+            steps {
+                script {
+                    sh """
+                    echo "${SSH_PRIVATE_KEY}" > ${WORKSPACE}/id_rsa
+                    chmod 600 ${WORKSPACE}/id_rsa
+
+                    # SSH to the Azure VM using the private key
+                    ssh -i ${WORKSPACE}/id_rsa ${VM_USER}@${VM_IP} 'echo "SSH connection established"'
+                    """
+                }
+            }
+        }
+        stage('Deploy to Azure VM') {
+            steps {
+                script {
+                    def resourceGroup = 'Harshvardhan'
+                    def vmName = 'VM1'
+
+                    // Stop the existing application, copy new files, and restart the application
+                    sh """
+                    az vm run-command invoke \
+                        --command-id RunShellScript \
+                        --name ${vmName} \
+                        --resource-group ${resourceGroup} \
+                        --scripts '
+                        # Stop the existing application
+                        sudo systemctl stop nginx
+
+                        # Remove old application files
+                        sudo rm -rf /var/www/html/*
+
+                        # Copy new build files to the VM
+                        scp -i ${WORKSPACE}/id_rsa -r build/* ${VM_USER}@${VM_IP}:/var/www/html/
+
+                        # Start the application (Nginx)
+                        sudo systemctl start nginx
+                        '
+                    """
+                }
+            }
+        }
+        stage('Health Check') {
+            steps {
+                script {
+                    def healthCheckUrl = "http://${VM_IP}/health"
+                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' ${healthCheckUrl}", returnStdout: true).trim()
+
+                    if (response != '200') {
+                        error "Health check failed with response code: ${response}"
+                    } else {
+                        echo "Health check passed."
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
