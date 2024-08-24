@@ -55,11 +55,7 @@ pipeline {
             }
         }
 
-         stage('List Directory') {
-            steps {
-                sh 'ls -la .next'
-            }
-        }
+       
         stage('Archive Artifacts') {
             steps {
                 archiveArtifacts artifacts: '.next/**', allowEmptyArchive: true
