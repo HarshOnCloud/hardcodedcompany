@@ -93,8 +93,6 @@ pipeline {
                         # Remove old application files
                         sudo rm -rf /var/www/html/*
 
-                        # output
-                        sudo 'ls -la'
                         # Copy new build files to the VM
                         scp -r .next/* azureuser@${vmIP}:/var/www/html/
 
