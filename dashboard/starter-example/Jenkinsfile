@@ -64,6 +64,7 @@ pipeline {
                 script {
                     sh """
                     echo "Establishing SSH connection..."
+                    echo $SSH_PRIVATE_KEY
                     chmod 600 $SSH_PRIVATE_KEY
                     ssh -i $SSH_PRIVATE_KEY azureuser@20.224.162.44 "echo SSH connection established"
                     """
