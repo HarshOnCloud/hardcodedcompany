@@ -63,7 +63,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    az login --identity
+                    chmod 600 ${SSH_PRIVATE_KEY}
+                    # SSH to the Azure VM using the private key
+                    ssh -i ${SSH_PRIVATE_KEY} ${VM_USER}@${VM_IP} 'echo "SSH connection established"'
                     """
                 }
             }
