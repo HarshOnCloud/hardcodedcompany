@@ -83,14 +83,17 @@ pipeline {
                 def vmIP = '20.224.162.44'
                 def vmUser = 'azureuser'  // Replace with actual VM username
 
-                // Ensure that the .next directory exists
+                // Ensure that .next directory exists and set permissions
                 sh 'ls -la .next'
                 sh 'chmod -R 755 .next'
-               
-
 
                 // Use sshagent to handle SSH connections
                 sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
+                    // Ensure the target directory exists and has correct permissions
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${vmUser}@${vmIP} 'mkdir -p /var/www/html && sudo chmod -R 755 /var/www/html'
+                    """
+
                     // Copy files to the remote VM
                     sh """
                     scp -o StrictHostKeyChecking=no -r .next/* ${vmUser}@${vmIP}:/var/www/html/
@@ -119,6 +122,7 @@ pipeline {
         }
     }
 }
+
 
         stage('Health Check') {
             steps {
