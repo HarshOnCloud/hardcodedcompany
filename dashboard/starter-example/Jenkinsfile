@@ -56,7 +56,7 @@ pipeline {
         }
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: '.next/**', allowEmptyArchive: true
             }
         }
         stage('Login to Azure') {
@@ -94,7 +94,7 @@ pipeline {
                         sudo rm -rf /var/www/html/*
 
                         # Copy new build files to the VM
-                        scp -r build/* azureuser@${vmIP}:/var/www/html/
+                        scp -r .next/* azureuser@${vmIP}:/var/www/html/
 
                         # Start the application (Nginx)
                         sudo systemctl start nginx
