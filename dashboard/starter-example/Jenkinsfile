@@ -76,6 +76,7 @@ pipeline {
         }
         stage('Deploy to Azure VM') {
             steps {
+                dir('dashboard/starter-example') {
                 script {
                     def resourceGroup = 'Harshvardhan'
                     def vmName = 'VM1'
@@ -110,6 +111,7 @@ pipeline {
                     """
                     }
                                     }
+                }
             }
         }
         stage('Health Check') {
