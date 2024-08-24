@@ -22,6 +22,23 @@ pipeline {
                 sh 'npm install'
             }
         }
+         stage('Update Packages') {
+            steps {
+                sh 'npm update'
+            }
+        }
+
+        stage('Lint and Fix') {
+            steps {
+                sh 'npm run lint -- --fix'
+            }
+        }
+
+        stage('Prettier Fix') {
+            steps {
+                sh 'npm run prettier -- --write .'
+            }
+        }
         stage('Run Tests') {
             steps {
                 sh 'npm test'
