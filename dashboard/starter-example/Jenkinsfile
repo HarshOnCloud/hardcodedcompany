@@ -78,6 +78,10 @@ pipeline {
 
                     // Stop the existing application, copy new files, and restart the application
                     sh """
+                    # Install Azure CLI
+                    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+                    # Verify installation
+                    az --version
                     az vm run-command invoke \
                         --command-id RunShellScript \
                         --name ${vmName} \
@@ -90,7 +94,7 @@ pipeline {
                         sudo rm -rf /var/www/html/*
 
                         # Copy new build files to the VM
-                        scp -i ${WORKSPACE}/id_rsa -r build/* ${VM_USER}@${VM_IP}:/var/www/html/
+                        scp -r build/* azureuser@${vmIP}:/var/www/html/
 
                         # Start the application (Nginx)
                         sudo systemctl start nginx
