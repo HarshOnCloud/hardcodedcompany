@@ -98,7 +98,7 @@ pipeline {
                         sudo rm -rf /var/www/html/*
 
 
-                        ls -la dashboard/starter-example/.next
+                        sudo ls -la dashboard/starter-example/.next
 
                         
                         # Copy new build files to the VM
