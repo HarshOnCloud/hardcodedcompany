@@ -99,11 +99,12 @@ pipeline {
                         sudo rm -rf /var/www/html/*
 
 
-                         sh 'ls -la dashboard/starter-example/.next'
+                        sh 'ls -la dashboard/starter-example/.next'
+                        chmod -R 755 .next
 
                         
                         # Copy new build files to the VM
-                        sudo scp -r dashboard/starter-example/.next/* azureuser@${vmIP}:/var/www/html/
+                        sudo scp -r .next/* azureuser@${vmIP}:/var/www/html/
 
                         # Start the application (Nginx)
                         sudo systemctl start nginx
