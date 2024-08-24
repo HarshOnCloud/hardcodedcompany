@@ -98,7 +98,7 @@ pipeline {
                         sudo rm -rf /var/www/html/*
 
 
-                        sh 'ls -la dashboard/starter-example/.next || echo "Directory not found or permission denied"'
+                         sh 'ls -la dashboard/starter-example/.next'
 
                         
                         # Copy new build files to the VM
