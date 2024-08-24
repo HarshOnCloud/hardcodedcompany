@@ -74,47 +74,50 @@ pipeline {
             }
         }
         }
-        stage('Deploy to Azure VM') {
-            steps {
-                dir('dashboard/starter-example') {
-                script {
-                    def resourceGroup = 'Harshvardhan'
-                    def vmName = 'VM1'
-                    def vmIP = '20.224.162.44'
-                    
-                    sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
+       stage('Deploy to Azure VM') {
+    steps {
+        dir('dashboard/starter-example') {
+            script {
+                def resourceGroup = 'Harshvardhan'
+                def vmName = 'VM1'
+                def vmIP = '20.224.162.44'
+                def vmUser = 'azureuser'  // Replace with actual VM username
+
+                // Ensure that the .next directory exists
+                sh 'ls -la .next'
+                sh 'chmod -R 755 .next'
+
+                // Use sshagent to handle SSH connections
+                sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
+                    // Copy files to the remote VM
                     sh """
-                    ssh -o StrictHostKeyChecking=no ${env.VM_USER}@${env.VM_IP} "echo 'Logged in successfully'"
-                    az login
-                    az account set --subscription c23fda47-c4d8-4460-bebe-412d27288d0c
-                    az vm run-command invoke \
-                        --command-id RunShellScript \
-                        --name ${vmName} \
-                        --resource-group ${resourceGroup} \
-                        --scripts '
-                        # Stop the existing application
-                        sudo systemctl stop nginx
-
-                        # Remove old application files
-                        sudo rm -rf /var/www/html/*
-
-
-                         
-                        chmod -R 755 .next
-
-                        
-                        # Copy new build files to the VM
-                        sudo scp -r .next/* azureuser@${vmIP}:/var/www/html/
-
-                        # Start the application (Nginx)
-                        sudo systemctl start nginx
-                        '
+                    scp -o StrictHostKeyChecking=no -r .next/* ${vmUser}@${vmIP}:/var/www/html/
                     """
-                    }
-                                    }
+
+                    // Execute commands on the remote VM
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${vmUser}@${vmIP} << EOF
+                    echo 'Logged in successfully'
+
+                    # Stop the existing application
+                    sudo systemctl stop nginx
+
+                    # Remove old application files
+                    sudo rm -rf /var/www/html/*
+
+                    # Ensure permissions
+                    sudo chmod -R 755 /var/www/html
+
+                    # Start the application (Nginx)
+                    sudo systemctl start nginx
+                    EOF
+                    """
                 }
             }
         }
+    }
+}
+
         stage('Health Check') {
             steps {
                 script {
