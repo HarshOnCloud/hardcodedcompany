@@ -44,9 +44,14 @@ pipeline {
                 sh 'npm test'
             }
         }
-        stage('Build') {
+         stage('Build') {
             steps {
-                sh 'npm run build'
+                // Navigate to the specific folder
+                dir('dashboard/final-example') {
+                    // Perform the build (adjust command as needed)
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
             }
         }
         stage('Archive Artifacts') {
