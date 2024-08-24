@@ -9,6 +9,7 @@ pipeline {
         SSH_PRIVATE_KEY = credentials('ab1ed2fc-ffdc-4b71-b710-476ae9705f3b')
         VM_IP = '20.224.162.44'
         VM_USER = 'azureuser'
+        PASSWORD = 'your_password'
     }
 
     stages {
@@ -62,11 +63,20 @@ pipeline {
         stage('Login to Azure') {
             steps {
                 script {
+                    // Create a temporary SSH key for the session
+                    def sshKey = "${env.WORKSPACE}/temp_ssh_key"
+                    sh "echo '${env.PASSWORD}' > ${sshKey}"
+                    
+                    // Set appropriate permissions
+                    sh "chmod 600 ${sshKey}"
+
+                    // Run SSH command to log in and execute a command on the Azure VM
                     sh """
-                    chmod 600 ${SSH_PRIVATE_KEY}
-                    # SSH to the Azure VM using the private key
-                    ssh -i ${SSH_PRIVATE_KEY} ${VM_USER}@${VM_IP} 'echo "SSH connection established"'
+                    sshpass -f ${sshKey} ssh -o StrictHostKeyChecking=no ${env.VM_USER}@${env.VM_IP} "echo 'Logged in successfully'"
                     """
+                    
+                    // Clean up
+                    sh "rm ${sshKey}"
                 }
             }
         }
