@@ -63,11 +63,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    echo "${SSH_PRIVATE_KEY}" > ${WORKSPACE}/id_rsa
-                    chmod 600 ${WORKSPACE}/id_rsa
-
-                    # SSH to the Azure VM using the private key
-                    ssh -i ${WORKSPACE}/id_rsa ${VM_USER}@${VM_IP} 'echo "SSH connection established"'
+                    echo "Establishing SSH connection..."
+                    chmod 600 $SSH_PRIVATE_KEY
+                    ssh -i $SSH_PRIVATE_KEY azureuser@20.224.162.44 "echo SSH connection established"
                     """
                 }
             }
