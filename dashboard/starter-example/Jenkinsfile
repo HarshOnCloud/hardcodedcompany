@@ -97,24 +97,6 @@ pipeline {
                     ls -la /var/www/html
                     """
 
-                    // Execute commands on the remote VM
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ${vmUser}@${vmIP} << EOF
-                    echo 'Logged in successfully'
-
-                    # Stop the existing application
-                    sudo systemctl stop nginx
-
-                    # Remove old application files
-                    sudo rm -rf /var/www/html/*
-
-                    # Ensure permissions
-                    sudo chmod -R 755 /var/www/html
-
-                    # Start the application (Nginx)
-                    sudo systemctl start nginx
-                    EOF
-                    """
                 }
             }
         }
