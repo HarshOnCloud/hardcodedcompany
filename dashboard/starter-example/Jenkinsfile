@@ -104,6 +104,8 @@ pipeline {
                     # Ensure permissions
                     sudo chmod -R 755 /var/www/html
 
+                    ls -la ${vmUser}@${vmIP}:/var/www/html/
+                    ls -ld ${vmUser}@${vmIP}:/var/www/html/
                     #copy files to remote VM
                     scp -o StrictHostKeyChecking=no -r .next/* ${vmUser}@${vmIP}:/var/www/html/
                     
