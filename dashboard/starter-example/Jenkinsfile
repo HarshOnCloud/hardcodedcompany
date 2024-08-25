@@ -93,8 +93,24 @@ pipeline {
 
                     // Copy files to the remote VM
                     sh """
+                    whoami
+                    
+                    # Stop the existing application
+                    sudo systemctl stop nginx
+
+                    # Remove old application files
+                    sudo rm -rf /var/www/html/*
+                    
+                    # Ensure permissions
+                    sudo chmod -R 755 /var/www/html
+
+                    #copy files to remote VM
                     scp -o StrictHostKeyChecking=no -r .next/* ${vmUser}@${vmIP}:/var/www/html/
-                    ls -la /var/www/html
+                    
+                    whoami
+                    
+                    # Start the application (Nginx)
+                    sudo systemctl start nginx
                     """
 
                 }
