@@ -104,10 +104,10 @@ pipeline {
                     # Ensure permissions
                     sudo chmod -R 755 /var/www/html
 
-                    ls -la jenkins@${vmIP}:/var/www/html/
-                    ls -ld jenkins@${vmIP}:/var/www/html/
+                    ls -la /var/www/html/
+                    ls -ld /var/www/html/
                     #copy files to remote VM
-                    scp -o StrictHostKeyChecking=no -r .next/* jenkins@${vmIP}:/var/www/html/
+                    scp -o StrictHostKeyChecking=no -r .next/* /var/www/html/
                     
                     whoami
                     
