@@ -46,9 +46,8 @@ pipeline {
         }
          stage('Build') {
             steps {
-                // Navigate to the specific folder
                 dir('dashboard/starter-example') {
-                    // Perform the build (adjust command as needed)
+                    
                     sh 'npm install --legacy-peer-deps'
                     sh 'npm run build'
                 }
@@ -81,37 +80,29 @@ pipeline {
                 def resourceGroup = 'Harshvardhan'
                 def vmName = 'VM1'
                 def vmIP = '20.224.162.44'
-                def vmUser = 'azureuser'  // Replace with actual VM username
+                def vmUser = 'azureuser'  
 
-                // Ensure that .next directory exists and set permissions
-                sh 'ls -la .next'
+                // setting permission on .next directory 
                 sh 'chmod -R 755 .next'
 
-                // Use sshagent to handle SSH connections
+                // Using sshagent to handle SSH connections
                 sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
-                    
-
-                    // Copy files to the remote VM
+                   
                     sh """
-                    whoami
                     
-                    # Stop the existing application
+                    # Stopping existing application
                     sudo systemctl stop nginx
 
-                    # Remove old application files
+                    # Removing old application files
                     sudo rm -rf /var/www/html/*
                     
-                    # Ensure permissions
+                    # setting permissions on the directory
                     sudo chmod -R 755 /var/www/html
-
-                    ls -la /var/www/html/
-                    ls -ld /var/www/html/
-                    #copy files to remote VM
+                    
+                    #copying files to VM
                     scp -o StrictHostKeyChecking=no -r .next/* /var/www/html/
                     
-                    whoami
-                    
-                    # Start the application (Nginx)
+                    # Starting the application 
                     sudo systemctl start nginx
                     """
 
@@ -120,14 +111,11 @@ pipeline {
         }
     }
 }
-
-
         stage('Health Check') {
             steps {
                 script {
                     def healthCheckUrl = "http://${VM_IP}"
                     def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' ${healthCheckUrl}", returnStdout: true).trim()
-
                     if (response != '200') {
                         error "Health check failed with response code: ${response}"
                     } else {
@@ -137,7 +125,7 @@ pipeline {
             }
         }
     }
-
+    
     post {
         always {
             cleanWs()
