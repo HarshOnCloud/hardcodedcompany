@@ -94,6 +94,7 @@ pipeline {
                     // Copy files to the remote VM
                     sh """
                     scp -o StrictHostKeyChecking=no -r .next/* ${vmUser}@${vmIP}:/var/www/html/
+                    ls -la /var/www/html
                     """
 
                     // Execute commands on the remote VM
