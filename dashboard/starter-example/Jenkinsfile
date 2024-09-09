@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         SSH_PRIVATE_KEY = credentials('ab1ed2fc-ffdc-4b71-b710-476ae9705f3b')
-        VM_IP = '20.224.162.44'
+        VM_IP = '135.236.99.56'
         VM_USER = 'azureuser'
     }
 
@@ -77,9 +77,9 @@ pipeline {
     steps {
         dir('dashboard/starter-example') {
             script {
-                def resourceGroup = 'Harshvardhan'
-                def vmName = 'VM1'
-                def vmIP = '20.224.162.44'
+                def resourceGroup = 'rg-harshvardhan'
+                def vmName = 'hardcoded'
+                def vmIP = '135.236.99.56'
                 def vmUser = 'azureuser'  
 
                 // setting permission on .next directory 
