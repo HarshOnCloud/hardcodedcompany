@@ -100,7 +100,10 @@ pipeline {
                     sudo chmod -R 755 /var/www/html
                     
                     #copying files to VM
-                    scp -o StrictHostKeyChecking=no -r .next/* /var/www/html/
+                    sudo scp -o StrictHostKeyChecking=no -r .next/* /var/www/html/
+
+                    #check if files got copied
+                    ls -la /var/www/html 
                     
                     # Starting the application 
                     sudo systemctl start nginx
