@@ -86,10 +86,7 @@ pipeline {
 
                     # Removing old application files
                     rm -rf azureuser@135.236.99.56:/var/www/html/*
-                    
-                    # setting permissions on the directory
-                    sudo chmod -R 755 azureuser@135.236.99.56:/var/www/html
-                    
+                                      
                     #copying files to VM
                     echo "test" > testfile.txt
                     scp -o StrictHostKeyChecking=no testfile.txt azureuser@135.236.99.56:/var/www/html/
