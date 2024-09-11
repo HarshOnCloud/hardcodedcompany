@@ -97,7 +97,7 @@ pipeline {
 
                     ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
                     
-                    scp -v -o StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
+                    scp -v -o StrictHostKeyChecking=no -r .next/* /var/www/html/
                     
                     # Starting the application 
                     sudo systemctl start nginx
