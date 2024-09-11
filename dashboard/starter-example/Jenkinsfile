@@ -91,7 +91,7 @@ pipeline {
                     echo "test" > testfile.txt
                     scp -o StrictHostKeyChecking=no testfile.txt azureuser@135.236.99.56:/var/www/html/
 
-                    scp -o -v StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
+                    scp -vv -o StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
 
                     # Optional: Check if files got copied
                     # ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
