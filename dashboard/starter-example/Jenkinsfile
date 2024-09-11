@@ -103,6 +103,9 @@ pipeline {
                     #copying files to VM
                     sudo scp -o StrictHostKeyChecking=no -r .next/* /var/www/html/
 
+                    # Optional: Check if files got copied
+                    ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
+
                     #check if files got copied
                     ls -la /var/www/html 
                     
