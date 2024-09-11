@@ -62,17 +62,6 @@ pipeline {
                 sh 'ls -la dashboard/starter-example/.next'
             }
         }
-        stage('Login to Azure') {
-            steps {
-                script {
-                    sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ${env.VM_USER}@${env.VM_IP} "echo 'Logged in successfully'"
-                    """
-                }
-            }
-        }
-        }
        stage('Deploy to Azure VM') {
     steps {
         dir('dashboard/starter-example') {
@@ -91,6 +80,7 @@ pipeline {
                     sh """
                     # Test SSH connection
                     ssh -o StrictHostKeyChecking=no ${vmUser}@${vmIP} 'echo SSH connection successful'
+                    
                     # Stopping existing application
                     sudo systemctl stop nginx
 
@@ -101,7 +91,7 @@ pipeline {
                     sudo chmod -R 755 /var/www/html
                     
                     #copying files to VM
-                    sudo scp -o StrictHostKeyChecking=no -r .next/* /var/www/html/
+                    sudo scp -o StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
 
                     # Optional: Check if files got copied
                     ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
