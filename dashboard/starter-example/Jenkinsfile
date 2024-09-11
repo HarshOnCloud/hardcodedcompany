@@ -89,7 +89,8 @@ pipeline {
                 sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
                    
                     sh """
-                    
+                    # Test SSH connection
+                    ssh -o StrictHostKeyChecking=no ${vmUser}@${vmIP} 'echo SSH connection successful'
                     # Stopping existing application
                     sudo systemctl stop nginx
 
