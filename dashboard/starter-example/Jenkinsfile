@@ -86,7 +86,7 @@ pipeline {
                     
                     # Stopping existing application
                     #sudo systemctl stop nginx
-                    ssh -o StrictHostKeyChecking=no root@${vmIP} 'sudo systemctl stop nginx'
+                    ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'sudo systemctl stop nginx'
 
                     # Removing old application files
                      ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'rm -rf /var/www/html/*'
@@ -104,7 +104,7 @@ pipeline {
                     #scp -v -o StrictHostKeyChecking=no -r .next/* /var/www/html/
                     
                     # Starting the application 
-                     ssh -o StrictHostKeyChecking=no root@${vmIP} 'sudo systemctl start nginx'
+                     ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'sudo systemctl start nginx'
                     """
 
                 }
