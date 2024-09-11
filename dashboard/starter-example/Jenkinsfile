@@ -92,7 +92,8 @@ pipeline {
                     scp -o StrictHostKeyChecking=no testfile.txt azureuser@135.236.99.56:/var/www/html/
 
                     ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
-                    ls -la /.next/
+                    ls -la .next
+                    pwd
                     scp -v -o StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
                     
                     # Starting the application 
