@@ -85,22 +85,22 @@ pipeline {
                     sudo systemctl stop nginx
 
                     # Removing old application files
-                    sudo rm -rf /var/www/html/*
+                    rm -rf azureuser@135.236.99.56:/var/www/html/*
                     
                     # setting permissions on the directory
-                    sudo chmod -R 755 /var/www/html
+                    chmod -R 755 azureuser@135.236.99.56:/var/www/html
                     
                     #copying files to VM
                     echo "test" > testfile.txt
                     scp -o StrictHostKeyChecking=no testfile.txt azureuser@135.236.99.56:/var/www/html/
 
-                    scp -o StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
+                    scp -o -v StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
 
                     # Optional: Check if files got copied
-                    ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
+                    # ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
 
                     #check if files got copied
-                    ls -la /var/www/html 
+                    ls -la azureuser@135.236.99.56:/var/www/html 
                     
                     # Starting the application 
                     sudo systemctl start nginx
