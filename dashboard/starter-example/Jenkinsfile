@@ -91,7 +91,7 @@ pipeline {
                     sudo chmod -R 755 /var/www/html
                     
                     #copying files to VM
-                    sudo scp -o StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
+                    scp -o StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
 
                     # Optional: Check if files got copied
                     ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
