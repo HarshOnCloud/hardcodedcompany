@@ -78,6 +78,9 @@ pipeline {
                 sshagent(['ab1ed2fc-ffdc-4b71-b710-476ae9705f3b']) {
                    
                     sh """
+
+                    ls -la .next
+                    pwd
                     # Test SSH connection
                     ssh -o StrictHostKeyChecking=no ${vmUser}@${vmIP} 'echo SSH connection successful'
                     
@@ -90,10 +93,10 @@ pipeline {
                     #copying files to VM
                     echo "test" > testfile.txt
                     scp -o StrictHostKeyChecking=no testfile.txt azureuser@135.236.99.56:/var/www/html/
+                    
 
                     ssh -o StrictHostKeyChecking=no azureuser@${vmIP} 'ls -la /var/www/html'
-                    ls -la .next
-                    pwd
+                    
                     scp -v -o StrictHostKeyChecking=no -r .next/* azureuser@135.236.99.56:/var/www/html/
                     
                     # Starting the application 
